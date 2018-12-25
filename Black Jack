@@ -1,0 +1,179 @@
+import java.io.*;
+
+public class Blackjack {
+
+	public static void main (String[] args)	throws IOException		{
+
+		InputStreamReader input = new InputStreamReader(System.in);
+		BufferedReader tastatur = new BufferedReader (input);
+
+		String eingabe;
+		String einundzwanzig = ",";
+		int konto=0;		//das Punktekonto des Spielers
+		int bolean=0;		//der Integer der zum boolean "ende" führt 
+		int karte=0;		//der Wert der zuletzt gezogenen Karte
+		int ass=0;		//die Anzahl der Asse
+		int bankKonto=0;		//das Punketkonto der Bank
+		boolean ende = false;		//beendet die Schleife des Spielers
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+		
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		System.out.println("zwei Karten werden gezogen");
+
+		karte = (int)((Math.random()) * 10 + 1);		//Die erste Spielerarte wird gezogen
+		if (karte == 1) {		//Es wird das Ass von den restlichen Karten getrennt
+			System.out.println("ein Ass!");	
+			ass = ass + 1;								
+			einundzwanzig = einundzwanzig + karte + " ,";		//Dies wird später für die tripple seven oder den Black Jack gebraucht
+		}
+		else {		//wenn eine normale Karte gezogen wird
+			System.out.println("eine " + karte + "!");	
+			konto = konto + karte;		//dem augenkonto wird der gezogene Wert hinzugefügt
+			einundzwanzig = einundzwanzig + karte + " ,";
+		}
+
+		System.out.println(" ");
+
+		karte = (int)((Math.random()) * 10 + 1);			//
+		if (karte == 1) {									//der
+			System.out.println("ein Ass!");					//obere
+			ass = ass + 1;									//Prozess
+			einundzwanzig = einundzwanzig + karte + " ,";	//wird
+		}													//für
+		else {												//die
+			System.out.println("eine " + karte + "!");		//zweite
+			konto = konto + karte;							//Karte
+			einundzwanzig = einundzwanzig + karte + " ,";	//wiederholt
+		}													//
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		System.out.println("Die Karte der Bank wird gezogen");
+
+		bankKonto = (int)((Math.random()) * 11 + 2);				//die Karte der Bank wird gezogen
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		while ((konto <= 21) && (ende == false)) {		//Die Schleife für den Spieler wird gestartet
+
+			System.out.println(" ");
+
+			if (ass == 0) {
+				System.out.println("Wert: " + konto);		//Die bisherigen Punkte werden ausgegeben
+			}
+			else {
+				System.out.println("Wert: " + konto + " |Anzahl Asse: " + ass);
+			}
+
+			System.out.println(" ");
+
+			System.out.println("Wollen sie noch eine Karte ziehen? (0:stand; 1:hit)");		//Die Entscheidung des Spielers ob
+			eingabe = tastatur.readLine();													//er eine weitere Karte
+			bolean = Integer.parseInt(eingabe);												//ziehen soll
+
+
+			if (bolean == 0)		//wenn der Spieler aufhören will
+			{
+				ende = true;		//der Boolean zum beenden der Schleife wird gesetzt
+			}
+
+			else		//wenn der Spieler weitermachen will
+			{
+				karte = (int)((Math.random()) * 10 + 1);
+				if (karte == 1) {
+					System.out.println("ein Ass!");	
+					ass = ass + 1;
+					einundzwanzig = einundzwanzig + karte + " ,";
+				}
+				else {
+					System.out.println("eine " + karte + "!");	
+					konto = konto + karte;
+					einundzwanzig = einundzwanzig + karte + " ,";
+				}	
+			}
+
+		}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		System.out.println(" ");
+		System.out.println(" ");
+
+		if (ass == 0) {
+			System.out.println("Wert: " + konto);		
+		}
+		else {
+			System.out.println("Anzahl Asse: " + ass);
+
+			while (ass > 0) {				//Hier
+				if(konto < 11) {			//werden 
+					konto = konto + 11;		//die
+					ass = ass - 1;			//Asse
+				}							//auf
+				else {						//das 
+					konto = konto + 1;		//Konto
+					ass = ass -1;			//verrechnet
+				}
+			}
+
+			System.out.println("Wert: " + konto);
+		}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		while (bankKonto <= 17) {												//Die 
+																				//Karten
+			if(bankKonto >= 11) {												//für 
+				bankKonto = bankKonto + (int)((Math.random()) * 10 + 1);		//die
+			}																	//Bank 
+			else {																//werden 
+				bankKonto = bankKonto + (int)((Math.random()) * 11 + 2);		//hier 
+			}																	//gezogen
+
+		}
+
+		System.out.println(" ");
+
+		System.out.println("Wert der Bank: " + bankKonto);		//Die endgültigen Punkte der Bank werden ausgegeben
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		System.out.println(" ");
+		System.out.println(" ");
+
+
+
+		if (( (bankKonto > 21) && (konto <= 21)) || ((konto > bankKonto) && (konto <= 21) )) {		//es wird entschieden ob man gewonnen hat oder nicht
+
+			switch(einundzwanzig) {
+
+			case ",7 ,7 ,7 ,7":
+				System.out.print("Eine tripple Seven! Sie haben gewonnen");
+
+			case ",1 ,10 ,":
+				System.out.print("Ein Black Jack! Sie haben gewonnen");
+
+			case ",10 ,1 ,":
+				System.out.print("Ein Black Jack! Sie haben gewonnen");
+
+			default:
+				System.out.print("Sie haben gewonnen");
+			}
+		}
+
+
+		else if((bankKonto == konto) && (konto <= 21)) {
+			System.out.print("Unentschieden!");
+		}
+
+
+		else {
+			System.out.print("Sie haben verloren");
+		}
+
+	}	
+}
